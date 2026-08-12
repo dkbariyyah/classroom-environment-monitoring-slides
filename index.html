@@ -1,783 +1,866 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Class Environment Monitoring - Slide Deck</title>
-
+  <title>Smart Class Environment Monitoring - IoT Slide Deck</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- FontAwesome Icons -->
+  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Google Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Custom Styles for Presentation Styling -->
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --accent-cyan: #06b6d4;
-      --accent-emerald: #10b981;
-      --accent-rose: #f43f5e;
-      --accent-amber: #f59e0b;
+  <script>
+    // Image fallback handling for Favoriot Dashboard screenshot
+    function handleDashImgError(img) {
+      if (!img.dataset.triedFallback) {
+        img.dataset.triedFallback = "true";
+        img.src = "favoriot_dashboard.png";
+      } else {
+        img.onerror = null;
+        if (img.parentElement) {
+          img.parentElement.innerHTML = '<div class="text-center p-6 glass-card rounded-xl text-slate-300 space-y-2"><i class="fa-solid fa-chart-line text-4xl text-slate-500 mb-1 block"></i><p class="font-bold text-base text-slate-200">Dashboard Screenshot Not Found</p><p class="text-xs text-slate-400 max-w-sm mx-auto">Make sure <b>favoriot_dashbaord.png</b> or <b>favoriot_dashboard.png</b> is uploaded in your repository folder.</p></div>';
+        }
+      }
     }
 
+    // Image fallback handling for Hardware Diagram image
+    function handleDiagramImgError(img) {
+      if (!img.dataset.triedFallback) {
+        img.dataset.triedFallback = "true";
+        img.src = "diagram.jpg";
+      } else {
+        img.onerror = null;
+        if (img.parentElement) {
+          img.parentElement.innerHTML = '<div class="text-center p-6 glass-card rounded-xl text-slate-300 space-y-2"><i class="fa-solid fa-diagram-project text-4xl text-slate-500 mb-1 block"></i><p class="font-bold text-base text-slate-200">diagram.png Not Found</p><p class="text-xs text-slate-400 max-w-sm mx-auto">Make sure <b>diagram.png</b> or <b>diagram.jpg</b> is uploaded in your repository folder.</p></div>';
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
+      background-color: #020617;
       color: #f8fafc;
-      overflow: hidden;
-      user-select: none;
+      overflow-x: hidden;
     }
 
     code, pre {
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Slide transition animations */
-    .slide {
-      display: none;
-      opacity: 0;
-      transform: translateX(30px);
-      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .slide.active {
-      display: flex;
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    /* Glassmorphism utility */
+    /* Glassmorphism Card Utility */
     .glass-card {
-      background: rgba(30, 41, 59, 0.65);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
     .glass-card-hover {
-      transition: all 0.25s ease;
-    }
-    .glass-card-hover:hover {
-      transform: translateY(-3px);
-      border-color: rgba(6, 182, 212, 0.3);
-      box-shadow: 0 12px 32px 0 rgba(6, 182, 212, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Custom scrollbars inside slides */
+    .glass-card-hover:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -10px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Custom Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.6);
+      background: #020617;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(100, 116, 139, 0.5);
-      border-radius: 4px;
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
     }
 
-    /* Glow utilities */
-    .glow-cyan {
-      box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    /* Slide Transition Animations */
+    .slide-step {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
     }
-    .glow-emerald {
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+
+    .slide-step.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    /* Pulse Glows */
+    .glow-blue {
+      box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.3);
     }
     .glow-rose {
-      box-shadow: 0 0 20px rgba(244, 63, 94, 0.3);
+      box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.3);
     }
   </style>
 </head>
-<body class="h-screen w-screen flex flex-col justify-between relative bg-slate-950 text-slate-100">
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
   <!-- Top Navigation Header -->
-  <header class="h-14 border-b border-slate-800 bg-slate-900/80 backdrop-blur px-6 flex items-center justify-between z-30 shrink-0">
+  <header class="w-full px-6 py-4 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
     <div class="flex items-center space-x-3">
-      <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold">
-        <i class="fa-solid fa-microchip"></i>
+      <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+        <i class="fa-solid fa-wind text-white text-base"></i>
       </div>
       <div>
-        <h1 class="text-sm font-semibold text-slate-200 leading-tight">Smart Class Environment Monitoring</h1>
-        <p class="text-[11px] text-slate-400">ESP32 • MQ-2 • DHT11 • Favoriot MQTT • Telegram</p>
+        <h1 class="text-sm font-bold text-slate-100 tracking-wide uppercase">Smart Class Environment Monitoring</h1>
+        <p class="text-[11px] text-slate-400">Team 1 PPK 10-14 August 2026</p>
       </div>
     </div>
 
-    <!-- Header Control Buttons -->
+    <!-- Quick Controls -->
     <div class="flex items-center space-x-2">
-      <button id="btnOverview" onclick="toggleOverviewModal()" title="Slide Grid Overview (Press O)" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md border border-slate-700 transition flex items-center gap-1.5">
-        <i class="fa-solid fa-table-cells"></i>
-        <span>Overview</span>
+      <button onclick="toggleOverviewModal()" title="Slide Overview (Press 'O')" class="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 border border-slate-700/50">
+        <i class="fa-solid fa-border-all text-blue-400"></i>
+        <span class="hidden sm:inline">Overview</span>
       </button>
-
-      <button id="btnNotes" onclick="toggleNotesModal()" title="Speaker Notes (Press N)" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md border border-slate-700 transition flex items-center gap-1.5">
+      <button onclick="toggleNotes()" title="Speaker Notes (Press 'N')" class="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 border border-slate-700/50">
         <i class="fa-solid fa-note-sticky text-amber-400"></i>
-        <span>Notes</span>
+        <span class="hidden sm:inline">Notes</span>
       </button>
-
-      <button id="btnFullscreen" onclick="toggleFullscreen()" title="Fullscreen Mode (Press F)" class="p-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md border border-slate-700 transition w-8 h-8 flex items-center justify-center">
-        <i class="fa-solid fa-expand"></i>
+      <button onclick="toggleFullscreen()" title="Fullscreen Mode (Press 'F')" class="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-300 hover:text-white transition flex items-center space-x-1.5 border border-slate-700/50">
+        <i class="fa-solid fa-expand text-emerald-400"></i>
+        <span class="hidden sm:inline">Fullscreen</span>
       </button>
     </div>
   </header>
 
-  <!-- Slide Viewport Container -->
-  <main class="flex-1 relative overflow-hidden flex items-center justify-center p-4 md:p-8">
+  <!-- Main Slide Presentation Viewport -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 flex items-center justify-center">
 
     <!-- SLIDE 1: Title Slide -->
-    <div class="slide active w-full max-w-6xl h-full flex-col justify-center items-center text-center space-y-8" data-slide="1">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-medium tracking-wide">
-        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-        MINI PROJECT PRESENTATION
-      </div>
-
-      <div class="space-y-4 max-w-4xl">
-        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-          Smart Class Environment Monitoring
-        </h1>
-        <p class="text-lg md:text-xl text-slate-300 font-light max-w-2xl mx-auto">
-          Real-time IoT Microclimate Sensing, Gas Threshold Detection, Audiovisual Alerts, & Cloud Automation
+    <section id="slide-1" class="slide-step active flex-col w-full h-full justify-center space-y-8 py-4">
+      <div class="text-center space-y-4 max-w-3xl mx-auto">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold tracking-wide">
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+          <span>IoT Mini-Project Presentation</span>
+        </div>
+        <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+          Smart Class Environment <br>
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400">
+            & Air Quality Monitoring
+          </span>
+        </h2>
+        <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto font-light">
+          Real-time microclimate tracking, smoke detection, local audiovisual warnings, and automated Favoriot MQTT cloud notifications for modern school safety.
         </p>
       </div>
 
-      <!-- Key Tech Tags -->
-      <div class="flex flex-wrap justify-center gap-3 pt-2">
-        <span class="px-3 py-1.5 glass-card rounded-lg text-xs font-mono text-cyan-300 border-cyan-500/20"><i class="fa-solid fa-bolt mr-1.5 text-cyan-400"></i>ESP32 MCU</span>
-        <span class="px-3 py-1.5 glass-card rounded-lg text-xs font-mono text-emerald-300 border-emerald-500/20"><i class="fa-solid fa-wind mr-1.5 text-emerald-400"></i>MQ-2 Gas Sensor</span>
-        <span class="px-3 py-1.5 glass-card rounded-lg text-xs font-mono text-amber-300 border-amber-500/20"><i class="fa-solid fa-temperature-high mr-1.5 text-amber-400"></i>DHT11 Temp/Hum</span>
-        <span class="px-3 py-1.5 glass-card rounded-lg text-xs font-mono text-purple-300 border-purple-500/20"><i class="fa-solid fa-cloud-bolt mr-1.5 text-purple-400"></i>Favoriot MQTT Broker</span>
-        <span class="px-3 py-1.5 glass-card rounded-lg text-xs font-mono text-blue-300 border-blue-500/20"><i class="fa-brands fa-telegram mr-1.5 text-blue-400"></i>Telegram Bot Rules</span>
-      </div>
-
-      <!-- Presenter Info Card -->
-      <div class="glass-card px-6 py-4 rounded-xl border border-slate-700/60 max-w-md w-full flex items-center justify-between text-left mt-6">
-        <div>
-          <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Presented by</p>
-          <p class="text-sm font-semibold text-slate-200">Team 1 PPK 10-14 August 2026</p>
-        </div>
-        <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold text-lg">
-          <i class="fa-solid fa-graduation-cap text-cyan-400"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 2: Objectives & Problem Statement -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-6" data-slide="2">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
-        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-lg font-bold">
-          01
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">Project Objectives & Problem Statement</h2>
-          <p class="text-xs text-slate-400">Addressing classroom indoor air quality, health, and environmental safety in schools</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Problem Statement Card -->
-        <div class="glass-card glass-card-hover p-6 rounded-2xl border-l-4 border-l-rose-500 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-9 h-9 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center text-lg">
-                <i class="fa-solid fa-school-circle-exclamation"></i>
-              </div>
-              <h3 class="text-lg font-semibold text-slate-200">The Classroom Problem</h3>
-            </div>
-            <ul class="space-y-3 text-sm text-slate-300">
-              <li class="flex items-start gap-2.5">
-                <i class="fa-solid fa-circle-xmark text-rose-400 text-xs mt-1"></i>
-                <span><strong>Poor Indoor Air & Stuffy Rooms:</strong> Enclosed classrooms often suffer from poor ventilation, haze, or smoke accumulation, causing student fatigue, drowsiness, and respiratory issues.</span>
-              </li>
-              <li class="flex items-start gap-2.5">
-                <i class="fa-solid fa-circle-xmark text-rose-400 text-xs mt-1"></i>
-                <span><strong>Unmonitored Safety Hazards:</strong> Smoke, overheating electrical equipment, or gas leaks near science labs/canteens go undetected without automated warning systems.</span>
-              </li>
-              <li class="flex items-start gap-2.5">
-                <i class="fa-solid fa-circle-xmark text-rose-400 text-xs mt-1"></i>
-                <span><strong>Lack of Remote Central Alerting:</strong> Teachers and school staff lack real-time visibility to immediately instruct students to wear masks or improve ventilation.</span>
-              </li>
-            </ul>
+      <!-- Presenter Metadata Card -->
+      <div class="max-w-xl mx-auto w-full glass-card rounded-2xl p-6 border border-slate-800/80 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-blue-600/10 rounded-full blur-2xl"></div>
+        <div class="grid grid-cols-2 gap-4 text-left">
+          <div class="space-y-1">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Presented by</span>
+            <p class="text-sm font-bold text-slate-200 flex items-center">
+              <i class="fa-solid fa-users text-blue-400 mr-2 text-xs"></i> Team 1 PPK
+            </p>
           </div>
-          <div class="mt-6 pt-3 border-t border-slate-800 text-xs text-rose-300/80 font-mono">
-            Requires automated classroom threshold triggers + instant student/teacher alerts.
+          <div class="space-y-1">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Date</span>
+            <p class="text-sm font-bold text-slate-200 flex items-center">
+              <i class="fa-solid fa-calendar-day text-indigo-400 mr-2 text-xs"></i> 10-14 August 2026
+            </p>
           </div>
-        </div>
-
-        <!-- Key Objectives Card -->
-        <div class="glass-card glass-card-hover p-6 rounded-2xl border-l-4 border-l-emerald-500 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
-                <i class="fa-solid fa-bullseye"></i>
-              </div>
-              <h3 class="text-lg font-semibold text-slate-200">Key Objectives</h3>
-            </div>
-            <ul class="space-y-3 text-sm text-slate-300">
-              <li class="flex items-start gap-2.5">
-                <i class="fa-solid fa-circle-check text-emerald-400 text-xs mt-1"></i>
-                <span><strong>Classroom Microclimate Sensing:</strong> Continuously monitor classroom temperature, humidity, and smoke/gas levels with 15-second cloud uploads.</span>
-              </li>
-              <li class="flex items-start gap-2.5">
-                <i class="fa-solid fa-circle-check text-emerald-400 text-xs mt-1"></i>
-                <span><strong>Student Visual & Audible Feedback:</strong> Display traffic light status LEDs (Green = Safe, Red = Wear Mask/Hazardous) and activate local buzzer alarms.</span>
-              </li>
-              <li class="flex items-start gap-2.5">
-                <i class="fa-solid fa-circle-check text-emerald-400 text-xs mt-1"></i>
-                <span><strong>Teacher Remote Monitoring & RPC:</strong> Enable teachers to monitor air quality on Favoriot, override buzzers, and auto-send Telegram alerts (>200 AQI).</span>
-              </li>
-            </ul>
-          </div>
-          <div class="mt-6 pt-3 border-t border-slate-800 text-xs text-emerald-300/80 font-mono">
-            Automated Telegram Bot alerts warn teachers when AQI threshold > 200.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 3: System Architecture -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-6" data-slide="3">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
-        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-lg font-bold">
-          02
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">4 Layers IoT System Architecture</h2>
-          <p class="text-xs text-slate-400">Structured 4-layer framework: Sensing &rarr; Network &rarr; Data Processing &rarr; Application</p>
-        </div>
-      </div>
-
-      <!-- 4 Layers Architecture Flow Stack -->
-      <div class="flex flex-col md:flex-row gap-4 items-stretch relative">
-        <!-- Upward Data Flow Indicator Bar -->
-        <div class="hidden md:flex flex-col items-center justify-between py-2 px-3 bg-slate-900/90 rounded-xl border border-slate-800 text-rose-400 shrink-0">
-          <i class="fa-solid fa-arrow-up text-lg animate-bounce"></i>
-          <span class="text-[10px] font-bold tracking-widest uppercase [writing-mode:vertical-lr] rotate-180 my-2 text-rose-400/90">Data Flow</span>
-          <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-        </div>
-
-        <!-- 4 Layer Cards Stacked (Top to Bottom: Application -> Data Processing -> Network -> Sensing) -->
-        <div class="flex-1 space-y-3">
-          
-          <!-- Layer 4: Application Layer -->
-          <div class="glass-card p-4 rounded-xl border-l-4 border-l-purple-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg font-bold shrink-0">
-                <i class="fa-solid fa-desktop"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Application Layer</span>
-                  <span class="text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded">Smart Applications &amp; Management</span>
-                </div>
-                <p class="text-xs font-semibold text-slate-200 mt-0.5">Smart Classroom Monitoring &amp; Telegram Bot Alerts</p>
-              </div>
-            </div>
-            <p class="text-xs text-slate-400 max-w-xs md:text-right">Favoriot Web Dashboard (Live Gauges, LED Status, Buzzer Control Switch) &amp; Automated Telegram Bot Notifications</p>
-          </div>
-
-          <!-- Layer 3: Data Processing Layer -->
-          <div class="glass-card p-4 rounded-xl border-l-4 border-l-amber-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg font-bold shrink-0">
-                <i class="fa-solid fa-brain"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Data Processing Layer</span>
-                  <span class="text-[10px] bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded">Processing Unit / Decision Unit</span>
-                </div>
-                <p class="text-xs font-semibold text-slate-200 mt-0.5">Favoriot Cloud IoT Platform</p>
-              </div>
-            </div>
-            <p class="text-xs text-slate-400 max-w-xs md:text-right">Data stream processing, historical storage, analytics middleware &amp; automated Rules Engine (<code class="text-amber-300">air_quality &gt; 200</code> trigger)</p>
-          </div>
-
-          <!-- Layer 2: Network Layer -->
-          <div class="glass-card p-4 rounded-xl border-l-4 border-l-cyan-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-lg font-bold shrink-0">
-                <i class="fa-solid fa-network-wired"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">Network Layer</span>
-                  <span class="text-[10px] bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded">Internet / Network Gateway</span>
-                </div>
-                <p class="text-xs font-semibold text-slate-200 mt-0.5">Wi-Fi Gateway &amp; Favoriot MQTT Broker</p>
-              </div>
-            </div>
-            <p class="text-xs text-slate-400 max-w-xs md:text-right">Wi-Fi transmission, MQTT telemetry publishing (<code class="text-cyan-300">v2/streams</code>) &amp; RPC downlink control (<code class="text-cyan-300">v2/rpc</code>)</p>
-          </div>
-
-          <!-- Layer 1: Sensing Layer -->
-          <div class="glass-card p-4 rounded-xl border-l-4 border-l-emerald-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg font-bold shrink-0">
-                <i class="fa-solid fa-microchip"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Sensing Layer</span>
-                  <span class="text-[10px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded">Physical Object / Data Gathering</span>
-                </div>
-                <p class="text-xs font-semibold text-slate-200 mt-0.5">ESP32 Microcontroller, Sensors &amp; Physical Actuators</p>
-              </div>
-            </div>
-            <p class="text-xs text-slate-400 max-w-xs md:text-right">MQ-2 Gas Sensor (GPIO 36), DHT11 Temp/Hum (GPIO 4), Red/Green Traffic LEDs (GPIO 26/27) &amp; Buzzer (GPIO 25)</p>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Footer Architecture Alignment Badge -->
-      <div class="glass-card p-3 rounded-xl border border-cyan-500/30 flex items-center justify-between text-xs">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-layer-group text-cyan-400"></i>
-          <span class="text-slate-300 font-semibold">4 Layers IoT Architecture Alignment</span>
-        </div>
-        <div class="flex items-center gap-2 font-mono text-[11px]">
-          <span class="text-emerald-400">Sensing Layer</span> &rarr;
-          <span class="text-cyan-400">Network Layer</span> &rarr;
-          <span class="text-amber-400">Data Processing Layer</span> &rarr;
-          <span class="text-purple-400">Application Layer</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 4: Circuit Diagram & Hardware Pinout -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-4" data-slide="4">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-lg font-bold">
-          03
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">Hardware Circuit Diagram & Pin Mapping</h2>
-          <p class="text-xs text-slate-400">Fritzing schematic and physical pin matrix for ESP32, MQ-2, DHT11, LEDs, and Buzzer</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-        <!-- Pin Mapping Table -->
-        <div class="lg:col-span-7 glass-card p-4 rounded-xl border border-slate-700/80 flex flex-col justify-between overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="border-b border-slate-700 text-slate-400 font-mono text-[11px]">
-                <th class="pb-2">Component</th>
-                <th class="pb-2">Sensor Signal</th>
-                <th class="pb-2">ESP32 Pin</th>
-                <th class="pb-2">Function / Mode</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800 text-slate-300">
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-2.5 font-semibold text-emerald-400"><i class="fa-solid fa-smog mr-1.5"></i>MQ-2 Gas Sensor</td>
-                <td class="py-2.5 font-mono text-slate-300">AO (Analog Out)</td>
-                <td class="py-2.5 font-mono font-bold text-cyan-400">GPIO 36 (VP)</td>
-                <td class="py-2.5 text-slate-400">ADC1 pin (Wi-Fi safe)</td>
-              </tr>
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-2.5 font-semibold text-amber-400"><i class="fa-solid fa-temperature-half mr-1.5"></i>DHT11 Temp/Hum</td>
-                <td class="py-2.5 font-mono text-slate-300">Data Pin</td>
-                <td class="py-2.5 font-mono font-bold text-cyan-400">GPIO 4</td>
-                <td class="py-2.5 text-slate-400">Digital Input</td>
-              </tr>
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-2.5 font-semibold text-rose-400"><i class="fa-solid fa-volume-high mr-1.5"></i>Buzzer Module</td>
-                <td class="py-2.5 font-mono text-slate-300">Positive (+) Pin</td>
-                <td class="py-2.5 font-mono font-bold text-cyan-400">GPIO 25</td>
-                <td class="py-2.5 text-slate-400">PWM / Digital Output</td>
-              </tr>
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-2.5 font-semibold text-rose-500"><i class="fa-solid fa-lightbulb mr-1.5"></i>Red LED</td>
-                <td class="py-2.5 font-mono text-slate-300">Anode (+)</td>
-                <td class="py-2.5 font-mono font-bold text-cyan-400">GPIO 26</td>
-                <td class="py-2.5 text-slate-400">Active when AQI &gt; 200</td>
-              </tr>
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-2.5 font-semibold text-emerald-500"><i class="fa-solid fa-lightbulb mr-1.5"></i>Green LED</td>
-                <td class="py-2.5 font-mono text-slate-300">Anode (+)</td>
-                <td class="py-2.5 font-mono font-bold text-cyan-400">GPIO 27</td>
-                <td class="py-2.5 text-slate-400">Active when AQI &le; 200</td>
-              </tr>
-              <tr class="hover:bg-slate-800/40">
-                <td class="py-2.5 font-semibold text-purple-400"><i class="fa-solid fa-plug mr-1.5"></i>Power Rails</td>
-                <td class="py-2.5 font-mono text-slate-300">VCC / GND</td>
-                <td class="py-2.5 font-mono font-bold text-purple-400">VIN (5V) & GND</td>
-                <td class="py-2.5 text-slate-400">5V Power for MQ-2 heater</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="p-2.5 mt-3 bg-slate-900/80 rounded-lg border border-slate-800 text-[11px] font-mono text-cyan-300 flex items-center justify-between">
-            <span><i class="fa-solid fa-code mr-1.5 text-cyan-400"></i>ADC Attenuation Setup:</span>
-            <code>analogSetAttenuation(ADC_11db);</code>
-          </div>
-        </div>
-
-        <!-- Circuit Diagram Image Card -->
-        <div class="lg:col-span-5 glass-card p-4 rounded-xl border border-cyan-500/30 flex flex-col justify-between space-y-3">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-            <div class="flex items-center space-x-2">
-              <i class="fa-solid fa-diagram-project text-cyan-400"></i>
-              <h3 class="text-xs font-bold text-slate-200">Fritzing Circuit Wiring</h3>
-            </div>
-            <button onclick="toggleDiagramModal()" class="px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded text-[10px] flex items-center gap-1 transition">
-              <i class="fa-solid fa-expand"></i> Expand
-            </button>
-          </div>
-          
-          <!-- Interactive Diagram Preview Box -->
-          <div class="relative bg-slate-950/90 rounded-lg p-2 border border-slate-800 flex items-center justify-center group overflow-hidden h-44 cursor-pointer" onclick="toggleDiagramModal()">
-            <img id="circuitDiagramImg" src="diagram.png" alt="Fritzing Circuit Diagram" class="max-h-full max-w-full object-contain rounded transition transform group-hover:scale-105" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-center p-4 text-slate-400 text-xs space-y-1\'><i class=\'fa-solid fa-image text-3xl text-slate-600 mb-1 block\'></i><p class=\'font-semibold text-slate-300\'>Fritzing Wiring Diagram</p><p class=\'text-[10px] text-slate-500\'>Place <b>diagram.png</b> in the same GitHub folder to view live image preview.</p></div>';">
-          </div>
-
-          <div class="p-2.5 bg-slate-900/80 rounded-lg border border-slate-800 text-[11px] text-slate-300 space-y-1">
-            <div class="flex items-center gap-1.5 text-amber-400 font-bold text-[10px] uppercase tracking-wide">
-              <i class="fa-solid fa-triangle-exclamation"></i> Pin Connection Highlights
-            </div>
-            <p class="text-[11px] text-slate-400 leading-snug">
-              MQ-2 uses <b>GPIO 36 (ADC1)</b> for Wi-Fi compatibility. <b>5V (VIN)</b> powers the internal heater element.
+          <div class="space-y-1 col-span-2 pt-3 border-t border-slate-800/80">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Platform & Connectivity</span>
+            <p class="text-sm font-bold text-slate-300 flex items-center">
+              <i class="fa-solid fa-cloud text-cyan-400 mr-2 text-xs"></i> ESP32 MCU &bull; Favoriot MQTT Platform &bull; Telegram Bot API
             </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- SLIDE 5: MQTT Communication Code Structure -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-5" data-slide="5">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-lg font-bold">
-          04
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">MQTT Protocol & Telemetry JSON Payload</h2>
-          <p class="text-xs text-slate-400">Structured telemetry JSON upload and RPC control downlink handling</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <!-- Code snippet card -->
-        <div class="glass-card p-4 rounded-xl border border-slate-700/80 flex flex-col justify-between">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <span class="text-xs font-mono text-cyan-400"><i class="fa-regular fa-file-code mr-1.5"></i>ESP32 MQTT Publish Code</span>
-            <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400">PubSubClient</span>
-          </div>
-          <pre class="text-[11px] leading-relaxed text-slate-300 overflow-x-auto p-3 bg-slate-950/80 rounded-lg border border-slate-800 my-3"><code>// Build JSON telemetry payload
-String jsonPayload = "{\"device_developer_id\":\"" + String(device_developer_id) + "\","
-                    + "\"data\":{"
-                    + "\"temperature\":" + String(temperature, 1) + ","
-                    + "\"humidity\":" + String(humidity, 1) + ","
-                    + "\"air_quality\":" + String(airQuality) + ","
-                    + "\"led_status\":\"" + ledStatus + "\""
-                    + "}}";
-
-// Publish to Favoriot stream topic
-client.publish(pub_topic.c_str(), jsonPayload.c_str());</code></pre>
-          <p class="text-[11px] text-slate-400">Periodic publishing interval set to <strong>15 seconds</strong> to manage cloud quota efficiently.</p>
-        </div>
-
-        <!-- Sample JSON Output card -->
-        <div class="glass-card p-4 rounded-xl border border-slate-700/80 flex flex-col justify-between">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <span class="text-xs font-mono text-emerald-400"><i class="fa-solid fa-code mr-1.5"></i>Stream JSON Payload Example</span>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Live Payload</span>
-          </div>
-          <pre class="text-[11px] leading-relaxed text-emerald-300 overflow-x-auto p-3 bg-slate-950/80 rounded-lg border border-slate-800 my-3"><code>{
-  "device_developer_id": "PPKIoT_1_device@dkbariyyah",
-  "data": {
-    "temperature": 28.4,
-    "humidity": 62.0,
-    "air_quality": 245,
-    "led_status": "RED"
-  }
-}</code></pre>
-          <div class="flex items-center justify-between text-[11px] text-slate-400">
-            <span>Key Match: <code class="text-cyan-400">air_quality</code></span>
-            <span>Threshold Check: <span class="text-rose-400 font-bold">&gt; 200 (Alert)</span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 6: Favoriot Dashboard Widgets -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-5" data-slide="6">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-lg font-bold">
-          05
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">Favoriot Dashboard & Widget Setup</h2>
-          <p class="text-xs text-slate-400">Visualization widgets and control switch parameters configured in Favoriot portal</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <!-- Widget 1: Gauge -->
-        <div class="glass-card p-5 rounded-xl border border-slate-700/80 text-center space-y-3">
-          <div class="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-500/30 mx-auto flex items-center justify-center text-cyan-400">
-            <i class="fa-solid fa-gauge"></i>
-          </div>
-          <h3 class="text-sm font-bold text-slate-200">Air Quality Gauge</h3>
-          <p class="text-xs text-slate-400">Circular Gauge Widget bound to parameter <code>air_quality</code></p>
-          <div class="p-3 bg-slate-900 rounded-lg text-2xl font-bold font-mono text-cyan-400 border border-slate-800">
-            245 <span class="text-xs font-normal text-slate-400">ADC</span>
-          </div>
-        </div>
-
-        <!-- Widget 2: Status Indicator -->
-        <div class="glass-card p-5 rounded-xl border border-slate-700/80 text-center space-y-3">
-          <div class="w-10 h-10 rounded-full bg-rose-500/10 border border-rose-500/30 mx-auto flex items-center justify-center text-rose-400">
-            <i class="fa-solid fa-lightbulb"></i>
-          </div>
-          <h3 class="text-sm font-bold text-slate-200">LED Status Widget</h3>
-          <p class="text-xs text-slate-400">Status Card mapped to parameter <code>led_status</code></p>
-          <div class="p-3 bg-rose-500/10 text-rose-400 rounded-lg text-lg font-bold font-mono border border-rose-500/30">
-            RED (Alert)
-          </div>
-        </div>
-
-        <!-- Widget 3: Control Switch -->
-        <div class="glass-card p-5 rounded-xl border border-slate-700/80 text-center space-y-3">
-          <div class="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/30 mx-auto flex items-center justify-center text-emerald-400">
-            <i class="fa-solid fa-toggle-on"></i>
-          </div>
-          <h3 class="text-sm font-bold text-slate-200">Buzzer Override Switch</h3>
-          <p class="text-xs text-slate-400">Control Switch widget with property <code>BUZZ</code> (1 / 0)</p>
-          <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-lg text-sm font-bold font-mono border border-emerald-500/30">
-            Switch: ON [RPC Sent]
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 7: AQI Scale & Telegram Rules Engine -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-5" data-slide="7">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 text-lg font-bold">
-          06
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">AQI Scale & Favoriot Telegram Rules Engine</h2>
-          <p class="text-xs text-slate-400">Health index mapping and automated instant alert workflows</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-        <!-- Scale Reference List -->
-        <div class="lg:col-span-7 glass-card p-4 rounded-xl border border-slate-700/80 space-y-2">
-          <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">AQI Health Level Mapping Scale</h3>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-800/60 text-emerald-300">
-              <span class="font-bold">0 - 50:</span> Good (Safe)
-            </div>
-            <div class="p-2.5 rounded-lg bg-emerald-900/40 border border-emerald-700/50 text-emerald-200">
-              <span class="font-bold">51 - 100:</span> Unhealthy
-            </div>
-            <div class="p-2.5 rounded-lg bg-amber-950/60 border border-amber-800/60 text-amber-300">
-              <span class="font-bold">101 - 150:</span> Poor
-            </div>
-            <div class="p-2.5 rounded-lg bg-orange-950/60 border border-orange-800/60 text-orange-300">
-              <span class="font-bold">151 - 200:</span> Severe
-            </div>
-            <div class="p-2.5 rounded-lg bg-rose-950/80 border border-rose-800/80 text-rose-300 font-bold col-span-2 flex items-center justify-between">
-              <span>201 - 300: Dangerous (Threshold Trigger)</span>
-              <span class="text-[10px] bg-rose-500 text-white px-2 py-0.5 rounded">RED LED</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Telegram Alert Box -->
-        <div class="lg:col-span-5 glass-card p-5 rounded-xl border border-blue-500/30 space-y-3">
-          <div class="flex items-center space-x-3 text-blue-400">
-            <i class="fa-brands fa-telegram text-2xl"></i>
-            <h3 class="text-sm font-bold text-slate-200">Automated Telegram Alert</h3>
-          </div>
-          <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 text-xs font-mono space-y-1.5 text-slate-300">
-            <p class="text-blue-400 font-bold">🤖 Favoriot Alert Bot</p>
-            <p>🚨 <strong>WARNING:</strong> Air Quality Threshold Exceeded!</p>
-            <p>• Device: PPKIoT_1_device</p>
-            <p>• Air Quality: <span class="text-rose-400 font-bold">245 ADC</span></p>
-            <p>• Status: <span class="text-rose-400">DANGEROUS</span></p>
-            <p class="text-[10px] text-slate-500 pt-1">Please wear a mask & check ventilation!</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 8: Demonstration & Test Verification -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-5" data-slide="8">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-lg font-bold">
-          07
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">Demonstration & Experimental Verification</h2>
-          <p class="text-xs text-slate-400">Performance testing across clean air baseline, smoke exposure, and RPC override</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="glass-card p-5 rounded-xl border border-slate-700/80 space-y-2">
-          <div class="text-emerald-400 text-sm font-bold flex items-center gap-2">
-            <i class="fa-solid fa-leaf"></i> Scenario A: Normal Air
-          </div>
-          <p class="text-xs text-slate-300">MQ-2 reading sits between 100 - 180 ADC units.</p>
-          <ul class="text-xs text-slate-400 space-y-1 pt-2">
-            <li>• Green LED: <span class="text-emerald-400">ON</span></li>
-            <li>• Red LED: OFF</li>
-            <li>• Telegram: Inactive</li>
-          </ul>
-        </div>
-
-        <div class="glass-card p-5 rounded-xl border border-rose-500/40 space-y-2">
-          <div class="text-rose-400 text-sm font-bold flex items-center gap-2">
-            <i class="fa-solid fa-fire-flame-curved"></i> Scenario B: Smoke Exceeded
-          </div>
-          <p class="text-xs text-slate-300">Gas level spikes past threshold value 200.</p>
-          <ul class="text-xs text-slate-400 space-y-1 pt-2">
-            <li>• Green LED: OFF</li>
-            <li>• Red LED: <span class="text-rose-400 font-bold">ON</span></li>
-            <li>• Telegram Alert Sent instantly</li>
-          </ul>
-        </div>
-
-        <div class="glass-card p-5 rounded-xl border border-cyan-500/40 space-y-2">
-          <div class="text-cyan-400 text-sm font-bold flex items-center gap-2">
-            <i class="fa-solid fa-sliders"></i> Scenario C: Web Override
-          </div>
-          <p class="text-xs text-slate-300">Dashboard switch toggled to ON position.</p>
-          <ul class="text-xs text-slate-400 space-y-1 pt-2">
-            <li>• MQTT RPC Downlink fired</li>
-            <li>• ESP32 receives command</li>
-            <li>• Buzzer sounds 1kHz tone</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 9: Conclusion & Future Work -->
-    <div class="slide w-full max-w-6xl h-full flex-col justify-center space-y-6" data-slide="9">
-      <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-lg font-bold">
-          08
-        </div>
-        <div>
-          <h2 class="text-2xl font-bold text-slate-100">Conclusion & Future Enhancements</h2>
-          <p class="text-xs text-slate-400">Summary of outcomes and potential system expansion</p>
-        </div>
+    <!-- SLIDE 2: Objectives & Problem Statement -->
+    <section id="slide-2" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4">
+        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 01</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white">Project Objectives & Classroom Challenges</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card p-6 rounded-2xl border-l-4 border-l-cyan-500 space-y-3">
-          <h3 class="text-base font-bold text-slate-200"><i class="fa-solid fa-flag-checkered text-cyan-400 mr-2"></i>Project Achievements</h3>
-          <ul class="space-y-2 text-xs text-slate-300">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check text-cyan-400 mt-0.5"></i>
-              <span>Successfully deployed real-time microclimate and smoke monitoring via ESP32.</span>
+        <!-- Problem Statement Card -->
+        <div class="glass-card rounded-2xl p-6 space-y-4 border border-rose-500/20 bg-gradient-to-br from-rose-950/10 to-slate-900/50">
+          <div class="flex items-center space-x-3">
+            <div class="p-2.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/30">
+              <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-100">Classroom Challenges</h3>
+          </div>
+          <ul class="space-y-3 text-sm text-slate-300">
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-xmark text-rose-400 mt-1"></i>
+              <span><b>Poor Ventilation & Stuffy Air:</b> High humidity and enclosed classrooms reduce student focus, cause drowsiness, and increase viral transmission risks.</span>
             </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check text-cyan-400 mt-0.5"></i>
-              <span>Migrated to full bidirectional MQTT protocol on Favoriot (`v2/streams` & `v2/rpc`).</span>
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-xmark text-rose-400 mt-1"></i>
+              <span><b>Smoke & Gas Hazards:</b> Unmonitored smoke or chemical gas leaks near school laboratories, canteens, or electrical rooms pose immediate health threats.</span>
             </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check text-cyan-400 mt-0.5"></i>
-              <span>Automated critical Telegram notifications using Favoriot cloud rules engine.</span>
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-xmark text-rose-400 mt-1"></i>
+              <span><b>Lack of Instant Teacher Alerts:</b> Traditional classrooms lack real-time digital sensors or remote alert systems to warn teachers when air quality degrades.</span>
             </li>
           </ul>
         </div>
 
-        <div class="glass-card p-6 rounded-2xl border-l-4 border-l-purple-500 space-y-3">
-          <h3 class="text-base font-bold text-slate-200"><i class="fa-solid fa-rocket text-purple-400 mr-2"></i>Future Roadmap</h3>
-          <ul class="space-y-2 text-xs text-slate-300">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-arrow-right text-purple-400 mt-0.5"></i>
-              <span><strong>Calibrated PPM Calculation:</strong> Map raw ADC values to logarithmic PPM concentration curves for specific gases.</span>
+        <!-- Project Objectives Card -->
+        <div class="glass-card rounded-2xl p-6 space-y-4 border border-emerald-500/20 bg-gradient-to-br from-emerald-950/10 to-slate-900/50">
+          <div class="flex items-center space-x-3">
+            <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <i class="fa-solid fa-bullseye text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-100">Project Solutions</h3>
+          </div>
+          <ul class="space-y-3 text-sm text-slate-300">
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><b>Continuous Microclimate Monitoring:</b> Measure room temperature ($^\circ\text{C}$), humidity ($\%$), and smoke concentration using ESP32 with DHT11 and MQ-2.</span>
             </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-arrow-right text-purple-400 mt-0.5"></i>
-              <span><strong>PM2.5 Sensor Addition:</strong> Integrate optical dust sensors for comprehensive indoor air quality index (AQI).</span>
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><b>Visual Student Safety Guidance:</b> Green LED indicates safe air. Red LED alerts students to put on protective masks or evacuate when gas exceeds 200 ADC.</span>
             </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-arrow-right text-purple-400 mt-0.5"></i>
-              <span><strong>Low Power Mode:</strong> Implement ESP32 Deep Sleep for long-term battery operation.</span>
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><b>Remote Teacher Dashboard & Telegram Alerts:</b> Teachers monitor classroom metrics on Favoriot, control the buzzer remotely, and receive instant Telegram alerts.</span>
             </li>
           </ul>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- SLIDE 3: 4-Layer IoT Architecture -->
+    <section id="slide-3" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4">
+        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 02</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white">4-Layer IoT Architecture</h2>
+      </div>
+
+      <!-- 4 Layers Container -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+        
+        <!-- Layer 4: Application Layer -->
+        <div class="glass-card glass-card-hover rounded-xl p-5 border-l-4 border-l-purple-500 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">Layer 4</span>
+            <i class="fa-solid fa-desktop text-purple-400 text-lg"></i>
+          </div>
+          <h3 class="font-bold text-slate-100 text-sm">Application Layer</h3>
+          <p class="text-xs text-slate-400">Smart Classroom Dashboard & Management</p>
+          <ul class="text-xs text-slate-300 space-y-1.5 pt-2 border-t border-slate-800">
+            <li class="flex items-center"><i class="fa-solid fa-chart-pie text-purple-400 mr-2 text-[10px]"></i>Favoriot Web Dashboard</li>
+            <li class="flex items-center"><i class="fa-solid fa-paper-plane text-purple-400 mr-2 text-[10px]"></i>Telegram Alert Bot</li>
+            <li class="flex items-center"><i class="fa-solid fa-toggle-on text-purple-400 mr-2 text-[10px]"></i>Remote Buzzer Switch</li>
+          </ul>
+        </div>
+
+        <!-- Layer 3: Data Processing Layer -->
+        <div class="glass-card glass-card-hover rounded-xl p-5 border-l-4 border-l-amber-500 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Layer 3</span>
+            <i class="fa-solid fa-cloud-arrow-up text-amber-400 text-lg"></i>
+          </div>
+          <h3 class="font-bold text-slate-100 text-sm">Data Processing Layer</h3>
+          <p class="text-xs text-slate-400">Processing & Decision Unit</p>
+          <ul class="text-xs text-slate-300 space-y-1.5 pt-2 border-t border-slate-800">
+            <li class="flex items-center"><i class="fa-solid fa-server text-amber-400 mr-2 text-[10px]"></i>Favoriot Cloud Engine</li>
+            <li class="flex items-center"><i class="fa-solid fa-gears text-amber-400 mr-2 text-[10px]"></i>Rules Engine (> 200 ADC)</li>
+            <li class="flex items-center"><i class="fa-solid fa-database text-amber-400 mr-2 text-[10px]"></i>Telemetry Storage</li>
+          </ul>
+        </div>
+
+        <!-- Layer 2: Network Layer -->
+        <div class="glass-card glass-card-hover rounded-xl p-5 border-l-4 border-l-blue-500 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">Layer 2</span>
+            <i class="fa-solid fa-wifi text-blue-400 text-lg"></i>
+          </div>
+          <h3 class="font-bold text-slate-100 text-sm">Network Layer</h3>
+          <p class="text-xs text-slate-400">Gateway & Data Transmission</p>
+          <ul class="text-xs text-slate-300 space-y-1.5 pt-2 border-t border-slate-800">
+            <li class="flex items-center"><i class="fa-solid fa-tower-broadcast text-blue-400 mr-2 text-[10px]"></i>Wi-Fi (802.11 b/g/n)</li>
+            <li class="flex items-center"><i class="fa-solid fa-network-wired text-blue-400 mr-2 text-[10px]"></i>MQTT Broker (Port 1883)</li>
+            <li class="flex items-center"><i class="fa-solid fa-route text-blue-400 mr-2 text-[10px]"></i>v2/streams & v2/rpc Topics</li>
+          </ul>
+        </div>
+
+        <!-- Layer 1: Sensing Layer -->
+        <div class="glass-card glass-card-hover rounded-xl p-5 border-l-4 border-l-emerald-500 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Layer 1</span>
+            <i class="fa-solid fa-microchip text-emerald-400 text-lg"></i>
+          </div>
+          <h3 class="font-bold text-slate-100 text-sm">Sensing Layer</h3>
+          <p class="text-xs text-slate-400">Physical Hardware & Sensors</p>
+          <ul class="text-xs text-slate-300 space-y-1.5 pt-2 border-t border-slate-800">
+            <li class="flex items-center"><i class="fa-solid fa-microchip text-emerald-400 mr-2 text-[10px]"></i>ESP32 Microcontroller</li>
+            <li class="flex items-center"><i class="fa-solid fa-smog text-emerald-400 mr-2 text-[10px]"></i>MQ-2 Smoke Sensor</li>
+            <li class="flex items-center"><i class="fa-solid fa-temperature-three-quarters text-emerald-400 mr-2 text-[10px]"></i>DHT11 Temp & Humidity</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Data Flow Banner -->
+      <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <span class="font-semibold text-slate-300 flex items-center">
+          <i class="fa-solid fa-arrow-up-long text-blue-400 mr-2 animate-bounce"></i> Data Uplink Flow:
+        </span>
+        <span class="text-slate-300">Sensing Layer (ESP32) $\rightarrow$ Network (Wi-Fi/MQTT) $\rightarrow$ Processing (Favoriot Cloud) $\rightarrow$ Application (Dashboard & Telegram)</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Hardware Diagram & Pin Mapping -->
+    <section id="slide-4" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 03</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Circuit Diagram & Pin Mapping</h2>
+        </div>
+        <button onclick="toggleDiagramModal()" class="px-3 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-xs font-medium border border-blue-500/30 flex items-center space-x-1.5">
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+          <span>Expand Diagram</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <!-- Fritzing Circuit Image Preview Card -->
+        <div class="lg:col-span-5 glass-card rounded-2xl p-4 flex flex-col items-center justify-center border border-slate-800">
+          <div class="relative group cursor-pointer w-full overflow-hidden rounded-xl border border-slate-700/60 bg-slate-950 p-2" onclick="toggleDiagramModal()">
+            <img src="diagram.png" alt="Fritzing Circuit Wiring Diagram" class="w-full h-48 object-contain rounded-lg transition duration-300 group-hover:scale-105" onerror="handleDiagramImgError(this)">
+            <div class="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg backdrop-blur-sm">
+              <span class="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold shadow-lg"><i class="fa-solid fa-expand mr-1.5"></i>Click to Zoom</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2 text-center">Fritzing Hardware Connections for ESP32 and Sensors</p>
+        </div>
+
+        <!-- Pin Mapping Table -->
+        <div class="lg:col-span-7 glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+          <h3 class="text-sm font-bold text-slate-200 flex items-center">
+            <i class="fa-solid fa-plug text-blue-400 mr-2"></i> ESP32 Hardware Pin Allocation
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-900/80 text-slate-400 font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-2.5">Component</th>
+                  <th class="p-2.5">Pin / Signal</th>
+                  <th class="p-2.5">ESP32 GPIO</th>
+                  <th class="p-2.5">Function</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                <tr>
+                  <td class="p-2.5 font-semibold text-amber-400">MQ-2 Gas Sensor</td>
+                  <td class="p-2.5">Analog Out (AO)</td>
+                  <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 36 (VP)</td>
+                  <td class="p-2.5">ADC1 Analog Smoke Reading</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-semibold text-cyan-400">DHT11 Sensor</td>
+                  <td class="p-2.5">Data Signal</td>
+                  <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 4</td>
+                  <td class="p-2.5">Digital Temperature & Humidity</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-semibold text-rose-400">Red LED</td>
+                  <td class="p-2.5">Anode ($+$)</td>
+                  <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 26</td>
+                  <td class="p-2.5">Alert State (`air_quality > 200`)</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-semibold text-emerald-400">Green LED</td>
+                  <td class="p-2.5">Anode ($+$)</td>
+                  <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 27</td>
+                  <td class="p-2.5">Safe State (`air_quality <= 200`)</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-semibold text-indigo-400">Buzzer Module</td>
+                  <td class="p-2.5">Positive ($+$)</td>
+                  <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 25</td>
+                  <td class="p-2.5">1 kHz Alarm Tone / Switch Override</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Software Architecture & MQTT Protocol -->
+    <section id="slide-5" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4">
+        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 04</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white">Software Architecture & MQTT Protocol</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- MQTT Telemetry Uplink Block -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-slate-200 flex items-center">
+              <i class="fa-solid fa-upload text-blue-400 mr-2"></i> MQTT Telemetry Uplink
+            </h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">Topic: v2/streams</span>
+          </div>
+          <p class="text-xs text-slate-400">Published every 15 seconds to Favoriot Broker (`mqtt.favoriot.com:1883`).</p>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-emerald-400 overflow-x-auto">
+            <pre><code>{
+  "device_developer_id": "PPKIoT_1_device@dkbariyyah",
+  "data": {
+    "temperature": 23.4,
+    "humidity": 42.0,
+    "air_quality": 54,
+    "led_status": "GREEN"
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- MQTT Downlink RPC Block -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-slate-200 flex items-center">
+              <i class="fa-solid fa-download text-indigo-400 mr-2"></i> MQTT RPC Downlink Control
+            </h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">Topic: v2/rpc</span>
+          </div>
+          <p class="text-xs text-slate-400">Triggered instantly when teacher toggles the "NOTIFY STUDENT" switch widget.</p>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-amber-400 overflow-x-auto">
+            <pre><code>// Received in callback() function:
+{
+  "BUZZ": 1   // or "buzzer_switch": "ON"
+}
+
+// Microcontroller Execution:
+tone(BUZZER_PIN, 1000); 
+digitalWrite(BUZZER_PIN, HIGH);</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Protocol Features Row -->
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div class="p-3 rounded-xl glass-card border border-slate-800 space-y-1">
+          <i class="fa-solid fa-bolt text-amber-400 text-base"></i>
+          <p class="text-xs font-bold text-slate-200">Sub-second Latency</p>
+          <p class="text-[10px] text-slate-400">Instant RPC response over HTTP polling</p>
+        </div>
+        <div class="p-3 rounded-xl glass-card border border-slate-800 space-y-1">
+          <i class="fa-solid fa-shield-halved text-blue-400 text-base"></i>
+          <p class="text-xs font-bold text-slate-200">API Key Authentication</p>
+          <p class="text-[10px] text-slate-400">Secure MQTT username/password headers</p>
+        </div>
+        <div class="p-3 rounded-xl glass-card border border-slate-800 space-y-1">
+          <i class="fa-solid fa-rotate text-emerald-400 text-base"></i>
+          <p class="text-xs font-bold text-slate-200">Auto Reconnection</p>
+          <p class="text-[10px] text-slate-400">`client.loop()` keeps connection alive</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Favoriot Web Dashboard Showcase -->
+    <section id="slide-6" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 05</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Favoriot Web Dashboard Showcase</h2>
+        </div>
+        <button onclick="toggleDashboardModal()" class="px-3 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-xs font-medium border border-blue-500/30 flex items-center space-x-1.5">
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+          <span>Expand Dashboard</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <!-- Live Dashboard Image Showcase -->
+        <div class="lg:col-span-7 glass-card rounded-2xl p-4 border border-slate-800">
+          <div class="relative group cursor-pointer w-full overflow-hidden rounded-xl border border-slate-700/60 bg-slate-950 p-2" onclick="toggleDashboardModal()">
+            <img src="favoriot_dashbaord.png" alt="Favoriot Live Web Dashboard Screenshot" class="w-full h-64 object-contain rounded-lg transition duration-300 group-hover:scale-105" onerror="handleDashImgError(this)">
+            <div class="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg backdrop-blur-sm">
+              <span class="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold shadow-lg"><i class="fa-solid fa-expand mr-1.5"></i>Click to Zoom Full Resolution</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Widgets Breakdown -->
+        <div class="lg:col-span-5 space-y-3">
+          <div class="p-3.5 rounded-xl glass-card border border-slate-800 flex items-start space-x-3">
+            <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              <i class="fa-solid fa-gauge-high text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-100">Environmental Air Quality Gauge</h4>
+              <p class="text-[11px] text-slate-400">Circular gauge reading real-time smoke concentration (54 ppm baseline reading).</p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl glass-card border border-slate-800 flex items-start space-x-3">
+            <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <i class="fa-solid fa-temperature-quarter text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-100">Temperature & Humidity Gauges</h4>
+              <p class="text-[11px] text-slate-400">Displays 23.4°C temperature and 42% humidity microclimate metrics.</p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl glass-card border border-slate-800 flex items-start space-x-3">
+            <div class="p-2 rounded-lg bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20">
+              <i class="fa-solid fa-toggle-on text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-100">"NOTIFY STUDENT" Control Switch</h4>
+              <p class="text-[11px] text-slate-400">RPC switch enabling teachers to manually sound the classroom buzzer remotely.</p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl glass-card border border-slate-800 flex items-start space-x-3">
+            <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <i class="fa-solid fa-chart-line text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-100">Historical Time-Series Line Graphs</h4>
+              <p class="text-[11px] text-slate-400">Tracks environmental trends over time for classroom microclimate analysis.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: AQI Threshold Logic & Telegram Rules -->
+    <section id="slide-7" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4">
+        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 06</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white">AQI Threshold Logic & Telegram Rules</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- AQI Scale Table -->
+        <div class="lg:col-span-7 glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+          <h3 class="text-sm font-bold text-slate-200 flex items-center">
+            <i class="fa-solid fa-layer-group text-blue-400 mr-2"></i> Air Quality Threshold Mapping
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-900/80 text-slate-400 font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-2">ADC Reading</th>
+                  <th class="p-2">Status</th>
+                  <th class="p-2">Action / Indicator</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                <tr>
+                  <td class="p-2 font-mono">0 – 50</td>
+                  <td class="p-2 font-bold text-emerald-400">Good</td>
+                  <td class="p-2"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Green LED ON</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-mono">51 – 100</td>
+                  <td class="p-2 font-bold text-emerald-300">Unhealthy</td>
+                  <td class="p-2"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Green LED ON</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-mono">101 – 150</td>
+                  <td class="p-2 font-bold text-amber-400">Poor</td>
+                  <td class="p-2"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Green LED ON</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-mono">151 – 200</td>
+                  <td class="p-2 font-bold text-orange-400">Severe</td>
+                  <td class="p-2"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Green LED ON</span></td>
+                </tr>
+                <tr class="bg-rose-500/10 font-bold">
+                  <td class="p-2 font-mono text-rose-400">> 200</td>
+                  <td class="p-2 text-rose-400">Dangerous / Hazardous</td>
+                  <td class="p-2"><span class="px-2 py-0.5 rounded bg-rose-500/30 text-rose-300 border border-rose-500/40 animate-pulse">RED LED + Telegram Alert</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Favoriot Telegram Bot Rules Integration -->
+        <div class="lg:col-span-5 glass-card rounded-2xl p-5 border border-slate-800 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <h3 class="text-sm font-bold text-slate-200 flex items-center">
+              <i class="fa-solid fa-robot text-sky-400 mr-2"></i> Favoriot Cloud Rules Engine
+            </h3>
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2 text-xs">
+              <div class="flex justify-between text-slate-400">
+                <span>Rule Target:</span>
+                <span class="text-slate-200 font-bold">`PPKIoT_1_device`</span>
+              </div>
+              <div class="flex justify-between text-slate-400">
+                <span>Expression:</span>
+                <span class="text-amber-400 font-mono font-bold">`air_quality > 200`</span>
+              </div>
+              <div class="flex justify-between text-slate-400">
+                <span>Action:</span>
+                <span class="text-sky-400 font-bold">Telegram Bot Dispatch</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulated Telegram Notification Popup -->
+          <div class="p-3.5 rounded-xl bg-sky-950/40 border border-sky-500/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-sky-400 flex items-center">
+                <i class="fa-paper-plane fa-solid mr-1.5"></i> Telegram Alert Bot
+              </span>
+              <span class="text-[10px] text-slate-400">Just Now</span>
+            </div>
+            <p class="text-xs text-slate-200">
+              🚨 <b>[CLASSROOM AIR ALERT]</b> <br>
+              Air Quality index exceeded safety threshold! <br>
+              Current Reading: <b>245 ADC</b>. Please instruct students to put on protective masks.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Testing & Experimental Verification -->
+    <section id="slide-8" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4">
+        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 07</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white">Testing & Experimental Verification</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Clean Air Baseline Test -->
+        <div class="glass-card rounded-2xl p-5 border border-emerald-500/20 bg-gradient-to-br from-emerald-950/10 to-slate-900/50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center">
+              <i class="fa-solid fa-leaf mr-2"></i> Test Case 1: Clean Air Baseline
+            </span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">PASSED</span>
+          </div>
+          <ul class="text-xs text-slate-300 space-y-2">
+            <li><b>Sensor Reading:</b> MQ-2 outputs baseline values between <b>50 – 180 ADC</b> in normal room air.</li>
+            <li><b>Hardware State:</b> Green LED turns ON; Red LED remains OFF; Buzzer remains silent.</li>
+            <li><b>Cloud State:</b> Favoriot telemetry stream updates every 15s showing safe values; no Telegram alerts fired.</li>
+          </ul>
+        </div>
+
+        <!-- Smoke Exposure Test -->
+        <div class="glass-card rounded-2xl p-5 border border-rose-500/20 bg-gradient-to-br from-rose-950/10 to-slate-900/50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center">
+              <i class="fa-solid fa-fire-flame-curved mr-2"></i> Test Case 2: Smoke Exposure
+            </span>
+            <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold">PASSED</span>
+          </div>
+          <ul class="text-xs text-slate-300 space-y-2">
+            <li><b>Sensor Reading:</b> MQ-2 reading spikes rapidly past <b>200 ADC</b> upon smoke detection.</li>
+            <li><b>Hardware State:</b> Local Green LED shuts OFF and Red LED activates instantly.</li>
+            <li><b>Cloud State:</b> Favoriot Rules engine detects breach; sends instant Telegram alert notification within seconds.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Verification Summary Table -->
+      <div class="p-4 rounded-2xl glass-card border border-slate-800 space-y-2">
+        <h4 class="text-xs font-bold text-slate-200">System Performance Metrics</h4>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+            <p class="text-slate-400 text-[10px]">Wi-Fi Reconnect Time</p>
+            <p class="text-sm font-bold text-blue-400">&lt; 3.5 Seconds</p>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+            <p class="text-slate-400 text-[10px]">MQTT Downlink Latency</p>
+            <p class="text-sm font-bold text-indigo-400">&lt; 500 ms</p>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+            <p class="text-slate-400 text-[10px]">Telegram Alert Delivery</p>
+            <p class="text-sm font-bold text-emerald-400">&lt; 2.0 Seconds</p>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+            <p class="text-slate-400 text-[10px]">Telemetry Rate</p>
+            <p class="text-sm font-bold text-amber-400">Every 15 Seconds</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Conclusion & Future Enhancements -->
+    <section id="slide-9" class="slide-step flex-col w-full h-full justify-center space-y-6">
+      <div class="border-b border-slate-800/80 pb-4">
+        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block">Section 08</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white">Conclusion & Future Enhancements</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Project Conclusion Card -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+          <div class="flex items-center space-x-3">
+            <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/30">
+              <i class="fa-solid fa-flag-checkered text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-100">Project Conclusion</h3>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            The Smart Class Environment Monitoring system successfully demonstrates a robust, low-cost IoT safety solution for schools. By combining ESP32 microcontrollers with Favoriot's MQTT broker, the platform achieves instant local visual feedback, remote teacher control, and automated Telegram emergency notifications.
+          </p>
+        </div>
+
+        <!-- Future Enhancements Card -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+          <div class="flex items-center space-x-3">
+            <div class="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
+              <i class="fa-solid fa-lightbulb text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-100">Future Enhancements</h3>
+          </div>
+          <ul class="text-xs text-slate-300 space-y-2.5">
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-arrow-right text-indigo-400 mt-0.5"></i>
+              <span><b>Calibrated PPM Calculation:</b> Upgrade logarithmic formulas to calculate exact PPM concentrations for specific gases (CO, LPG, Smoke).</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-arrow-right text-indigo-400 mt-0.5"></i>
+              <span><b>PM2.5 Dust Particle Integration:</b> Add laser dust sensors (e.g., SDS011 or PMS5003) to monitor fine particulate haze in school halls.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <i class="fa-solid fa-arrow-right text-indigo-400 mt-0.5"></i>
+              <span><b>Solar & Battery Backup:</b> Enable ESP32 deep sleep modes and solar charging for zero-downtime campus-wide deployment.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Q&A Thank You Banner -->
+      <div class="p-6 rounded-2xl bg-gradient-to-r from-blue-900/30 via-indigo-900/30 to-slate-900 border border-blue-500/30 text-center space-y-2">
+        <h3 class="text-xl font-extrabold text-white">Thank You! Any Questions?</h3>
+        <p class="text-xs text-slate-400">Team 1 PPK 10-14 August 2026 &bull; Smart Class Environment Monitoring</p>
+      </div>
+    </section>
 
   </main>
 
-  <!-- Bottom Navigation Control Footer -->
-  <footer class="h-16 border-t border-slate-800 bg-slate-900/80 backdrop-blur px-6 flex items-center justify-between z-30 shrink-0">
-    <!-- Prev Button -->
-    <button id="btnPrev" onclick="prevSlide()" class="px-4 py-2 text-xs bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 rounded-lg border border-slate-700 transition flex items-center gap-2">
-      <i class="fa-solid fa-chevron-left"></i>
-      <span>Previous</span>
-    </button>
+  <!-- Speaker Notes Drawer (Toggled by Pressing 'N') -->
+  <aside id="notesDrawer" class="fixed bottom-16 right-6 max-w-md w-full glass-card rounded-2xl p-5 border border-amber-500/30 shadow-2xl hidden z-40 space-y-2 transition-all">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+      <h4 class="text-xs font-bold text-amber-400 flex items-center">
+        <i class="fa-solid fa-note-sticky mr-2"></i> Speaker Talking Points
+      </h4>
+      <button onclick="toggleNotes()" class="text-slate-400 hover:text-white text-xs">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <p id="speakerNotesText" class="text-xs text-slate-300 leading-relaxed font-light">
+      Loading presenter notes...
+    </p>
+  </aside>
 
-    <!-- Slide Indicators & Counter -->
-    <div class="flex items-center space-x-4">
-      <div id="dotsContainer" class="hidden md:flex items-center space-x-1.5">
-        <!-- Dynamically generated indicator dots -->
-      </div>
-      <span id="slideCounter" class="text-xs font-mono text-cyan-400 bg-slate-800 px-3 py-1 rounded-md border border-slate-700">
-        Slide 1 of 9
-      </span>
+  <!-- Bottom Interactive Presentation Controls Bar -->
+  <footer class="w-full px-6 py-3 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md flex items-center justify-between z-30">
+    <div class="flex items-center space-x-2">
+      <button onclick="prevSlide()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition border border-slate-700 flex items-center space-x-1.5">
+        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        <span>Prev</span>
+      </button>
+      <button onclick="nextSlide()" class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition shadow-lg shadow-blue-500/20 flex items-center space-x-1.5">
+        <span>Next</span>
+        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+      </button>
     </div>
 
-    <!-- Next Button -->
-    <button id="btnNext" onclick="nextSlide()" class="px-4 py-2 text-xs bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white font-semibold rounded-lg shadow-lg shadow-cyan-600/20 transition flex items-center gap-2">
-      <span>Next</span>
-      <i class="fa-solid fa-chevron-right"></i>
-    </button>
+    <!-- Slide Step Indicators -->
+    <div class="flex items-center space-x-2">
+      <span class="text-xs text-slate-400 font-mono">Slide <span id="currentSlideNum" class="text-blue-400 font-bold">1</span> of <span id="totalSlideNum">9</span></span>
+    </div>
   </footer>
-
-  <!-- Overview Modal (Grid View) -->
-  <div id="overviewModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex-col p-6 overflow-y-auto">
-    <div class="flex items-center justify-between pb-4 border-b border-slate-800 max-w-6xl mx-auto w-full">
-      <h3 class="text-lg font-bold text-slate-200"><i class="fa-solid fa-table-cells text-cyan-400 mr-2"></i>Slide Grid Overview</h3>
-      <button onclick="toggleOverviewModal()" class="text-slate-400 hover:text-white text-xl">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div id="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto w-full pt-6">
-      <!-- Grid Cards injected via JS -->
-    </div>
-  </div>
-
-  <!-- Speaker Notes Modal -->
-  <div id="notesModal" class="fixed bottom-20 right-6 w-96 glass-card border border-amber-500/40 rounded-2xl p-5 z-40 hidden shadow-2xl space-y-3">
-    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
-      <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-        <i class="fa-solid fa-comment-dots"></i> Speaker Script / Notes
-      </span>
-      <button onclick="toggleNotesModal()" class="text-slate-400 hover:text-white text-xs">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div id="notesContent" class="text-xs text-slate-300 leading-relaxed max-h-60 overflow-y-auto pr-1">
-      <!-- Notes content updated dynamically -->
-    </div>
-  </div>
 
   <!-- Circuit Diagram Lightbox Modal -->
   <div id="diagramModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex-col p-6 overflow-y-auto items-center justify-center">
     <div class="flex items-center justify-between pb-3 border-b border-slate-800 max-w-5xl mx-auto w-full">
-      <h3 class="text-base font-bold text-slate-200"><i class="fa-solid fa-diagram-project text-cyan-400 mr-2"></i>Fritzing Circuit Wiring Schematic</h3>
+      <h3 class="text-base font-bold text-slate-200"><i class="fa-solid fa-diagram-project text-blue-400 mr-2"></i>ESP32 Hardware Schematic & Wiring Diagram</h3>
       <button onclick="toggleDiagramModal()" class="text-slate-400 hover:text-white text-xl">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
     <div class="max-w-5xl w-full flex-1 flex items-center justify-center p-4">
-      <img src="diagram.png" alt="Full High-Res Fritzing Circuit Diagram" class="max-h-[80vh] w-auto object-contain rounded-xl border border-slate-700 shadow-2xl" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-center p-8 glass-card rounded-xl text-slate-300 space-y-2\'><i class=\'fa-solid fa-image text-5xl text-slate-600 mb-2 block\'></i><p class=\'font-bold text-lg\'>diagram.png Not Found</p><p class=\'text-xs text-slate-400 max-w-sm mx-auto\'>Make sure <b>diagram.png</b> is uploaded to the root folder of your GitHub repository alongside <b>index.html</b>.</p></div>';">
+      <img src="diagram.png" alt="Fritzing Circuit Wiring Diagram Full Resolution" class="max-h-[82vh] w-auto object-contain rounded-xl border border-slate-700 shadow-2xl" onerror="handleDiagramImgError(this)">
+    </div>
+  </div>
+
+  <!-- Favoriot Dashboard Lightbox Modal -->
+  <div id="dashboardModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex-col p-6 overflow-y-auto items-center justify-center">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-800 max-w-6xl mx-auto w-full">
+      <h3 class="text-base font-bold text-slate-200"><i class="fa-solid fa-desktop text-blue-400 mr-2"></i>Favoriot Web Dashboard - SMART CLASS ENVIRONMENT MONITORING</h3>
+      <button onclick="toggleDashboardModal()" class="text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="max-w-6xl w-full flex-1 flex items-center justify-center p-4">
+      <img src="favoriot_dashbaord.png" alt="Favoriot Live Web Dashboard Full Resolution" class="max-h-[82vh] w-auto object-contain rounded-xl border border-slate-700 shadow-2xl" onerror="handleDashImgError(this)">
+    </div>
+  </div>
+
+  <!-- Slide Overview Grid Modal -->
+  <div id="overviewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-lg z-50 hidden flex-col p-6 overflow-y-auto">
+    <div class="flex items-center justify-between pb-4 border-b border-slate-800 max-w-6xl mx-auto w-full">
+      <h3 class="text-base font-bold text-slate-200"><i class="fa-solid fa-border-all text-blue-400 mr-2"></i>Slide Overview Grid</h3>
+      <button onclick="toggleOverviewModal()" class="text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto w-full pt-6">
+      <button onclick="goToSlide(1); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 01</span>
+        <p class="text-xs font-bold text-slate-200">Title & Project Details</p>
+      </button>
+      <button onclick="goToSlide(2); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 02</span>
+        <p class="text-xs font-bold text-slate-200">Classroom Objectives & Challenges</p>
+      </button>
+      <button onclick="goToSlide(3); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 03</span>
+        <p class="text-xs font-bold text-slate-200">4-Layer IoT Architecture</p>
+      </button>
+      <button onclick="goToSlide(4); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 04</span>
+        <p class="text-xs font-bold text-slate-200">Circuit Diagram & Hardware Wiring</p>
+      </button>
+      <button onclick="goToSlide(5); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 05</span>
+        <p class="text-xs font-bold text-slate-200">Software Architecture & MQTT</p>
+      </button>
+      <button onclick="goToSlide(6); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 06</span>
+        <p class="text-xs font-bold text-slate-200">Favoriot Web Dashboard Showcase</p>
+      </button>
+      <button onclick="goToSlide(7); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 07</span>
+        <p class="text-xs font-bold text-slate-200">AQI Thresholds & Telegram Rules</p>
+      </button>
+      <button onclick="goToSlide(8); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 08</span>
+        <p class="text-xs font-bold text-slate-200">Testing & Experimental Verification</p>
+      </button>
+      <button onclick="goToSlide(9); toggleOverviewModal();" class="p-4 rounded-xl glass-card text-left hover:border-blue-500 transition space-y-1">
+        <span class="text-[10px] font-bold text-blue-400">Slide 09</span>
+        <p class="text-xs font-bold text-slate-200">Conclusion & Future Enhancements</p>
+      </button>
     </div>
   </div>
 
@@ -786,126 +869,79 @@ client.publish(pub_topic.c_str(), jsonPayload.c_str());</code></pre>
     const totalSlides = 9;
 
     const speakerNotes = {
-      1: "Good day, everyone. Welcome to our presentation on the Smart Environmental and Air Quality Monitoring System using ESP32, MQ-2, DHT11, and Favoriot MQTT platform.",
-      2: "Here we outline our primary objectives: addressing poor classroom ventilation, haze, and smoke risks in schools, while giving teachers real-time dashboard visibility and instant Telegram alerts to protect student health.",
-      3: "Our system strictly adheres to the standard 4-Layer IoT Architecture: Sensing Layer (ESP32 & Sensors), Network Layer (Wi-Fi & Favoriot MQTT Broker), Data Processing Layer (Favoriot Cloud Platform & Rules Engine), and Application Layer (Smart Classroom Dashboard & Telegram Alerts).",
-      4: "Notice the hardware schematic and pin mapping. Crucially, the MQ-2 sensor connects to GPIO 36, an ADC1 pin on the ESP32 that remains functional while Wi-Fi is active. You can click 'Expand' on the diagram box to inspect the full wiring.",
-      5: "Instead of HTTP polling, we use MQTT for sub-second communication. Sensor data publishes to v2/streams, while switch commands arrive on v2/rpc.",
-      6: "On Favoriot, we configured a Gauge widget for Air Quality, a Status card for Red/Green LED state, and a Control Switch bound to key BUZZ.",
+      1: "Good day, everyone. Welcome to our presentation on the Smart Class Environment Monitoring System developed by Team 1 PPK.",
+      2: "Here we outline our classroom-focused objectives: solving poor ventilation, stuffy air, and smoke/chemical hazards near laboratories, while empowering teachers with live web monitoring and instant Telegram safety alerts.",
+      3: "Our system strictly follows the 4-Layer IoT Architecture: Sensing Layer (ESP32 & Sensors), Network Layer (Wi-Fi & Favoriot MQTT Broker), Data Processing Layer (Favoriot Cloud & Rules Engine), and Application Layer (Smart Classroom Dashboard & Telegram Bot).",
+      4: "Notice our hardware schematic and pin mapping. Crucially, the MQ-2 sensor connects to GPIO 36, an ADC1 pin on the ESP32 that remains fully functional while Wi-Fi is active. You can click 'Expand Diagram' to inspect full wiring.",
+      5: "Instead of slow HTTP polling, we use sub-second MQTT communication. Sensor data publishes to v2/streams every 15s, while teacher switch commands arrive on v2/rpc.",
+      6: "Here is our live Favoriot Dashboard named 'SMART CLASS ENVIRONMENT MONITORING'. It features real-time Temperature (23.4°C) and Humidity (42%) gauges with line graphs, an Environmental Air Quality gauge reading 54 ppm, a Malaysia digital clock, and the 'NOTIFY STUDENT' control switch.",
       7: "When air quality exceeds our threshold of 200 ADC units, local hardware triggers the Red LED, and Favoriot's rules engine automatically pushes an alert to Telegram.",
-      8: "Experimental verification confirmed that smoke exposure triggers Red LED activation and instant Telegram alert delivery.",
+      8: "Experimental verification confirmed that smoke exposure triggers Red LED activation and instant Telegram alert delivery within 2 seconds.",
       9: "In conclusion, the project successfully deployed a robust, low-cost IoT monitor. Future improvements include calibrated PPM calculations and PM2.5 sensors."
     };
 
-    function showSlide(index) {
-      if (index < 1) index = 1;
-      if (index > totalSlides) index = totalSlides;
-
-      currentSlide = index;
-
-      document.querySelectorAll('.slide').forEach(slide => {
-        slide.classList.remove('active');
+    function updateSlide() {
+      document.querySelectorAll('.slide-step').forEach((slide, index) => {
+        if (index + 1 === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
       });
 
-      const activeSlide = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
-      if (activeSlide) {
-        activeSlide.classList.add('active');
-      }
-
-      // Update counter text
-      document.getElementById('slideCounter').textContent = `Slide ${currentSlide} of ${totalSlides}`;
-
-      // Update speaker notes
-      document.getElementById('notesContent').textContent = speakerNotes[currentSlide] || "No notes available for this slide.";
-
-      // Update dots indicator
-      renderDots();
+      document.getElementById('currentSlideNum').innerText = currentSlide;
+      document.getElementById('speakerNotesText').innerText = speakerNotes[currentSlide] || "No speaker notes available.";
     }
 
     function nextSlide() {
       if (currentSlide < totalSlides) {
-        showSlide(currentSlide + 1);
+        currentSlide++;
+        updateSlide();
       }
     }
 
     function prevSlide() {
       if (currentSlide > 1) {
-        showSlide(currentSlide - 1);
+        currentSlide--;
+        updateSlide();
       }
     }
 
-    function renderDots() {
-      const container = document.getElementById('dotsContainer');
-      container.innerHTML = '';
-      for (let i = 1; i <= totalSlides; i++) {
-        const dot = document.createElement('button');
-        dot.className = `w-2 h-2 rounded-full transition-all ${i === currentSlide ? 'bg-cyan-400 w-5' : 'bg-slate-700 hover:bg-slate-500'}`;
-        dot.onclick = () => showSlide(i);
-        container.appendChild(dot);
+    function goToSlide(slideNum) {
+      if (slideNum >= 1 && slideNum <= totalSlides) {
+        currentSlide = slideNum;
+        updateSlide();
       }
     }
 
-    function populateOverviewGrid() {
-      const grid = document.getElementById('gridContainer');
-      grid.innerHTML = '';
-
-      const slideTitles = [
-        "Title Slide", "Objectives & Problem", "System Architecture",
-        "Hardware Pinout", "MQTT Code & JSON", "Favoriot Dashboard",
-        "AQI Scale & Telegram", "Test Verification", "Conclusion & Roadmap"
-      ];
-
-      for (let i = 1; i <= totalSlides; i++) {
-        const card = document.createElement('div');
-        card.className = `glass-card p-4 rounded-xl border border-slate-700 hover:border-cyan-500 cursor-pointer transition flex flex-col justify-between h-32 ${i === currentSlide ? 'border-cyan-400 ring-1 ring-cyan-400' : ''}`;
-        card.onclick = () => {
-          showSlide(i);
-          toggleOverviewModal();
-        };
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between text-xs font-mono text-slate-400">
-            <span>Slide 0${i}</span>
-            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-          </div>
-          <p class="text-sm font-semibold text-slate-200">${slideTitles[i - 1]}</p>
-          <p class="text-[10px] text-slate-400 truncate">${speakerNotes[i].substring(0, 50)}...</p>
-        `;
-        grid.appendChild(card);
-      }
-    }
-
-    function toggleOverviewModal() {
-      const modal = document.getElementById('overviewModal');
-      if (modal.classList.contains('hidden')) {
-        populateOverviewGrid();
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      } else {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
-    }
-
-    function toggleNotesModal() {
-      const notes = document.getElementById('notesModal');
-      notes.classList.toggle('hidden');
+    function toggleNotes() {
+      const drawer = document.getElementById('notesDrawer');
+      drawer.classList.toggle('hidden');
     }
 
     function toggleDiagramModal() {
       const modal = document.getElementById('diagramModal');
-      if (modal.classList.contains('hidden')) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      } else {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
+    }
+
+    function toggleDashboardModal() {
+      const modal = document.getElementById('dashboardModal');
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
+    }
+
+    function toggleOverviewModal() {
+      const modal = document.getElementById('overviewModal');
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
     }
 
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
       } else {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -913,24 +949,23 @@ client.publish(pub_topic.c_str(), jsonPayload.c_str());</code></pre>
       }
     }
 
+    // Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'PageDown') {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
         nextSlide();
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         prevSlide();
+      } else if (e.key === 'n' || e.key === 'N') {
+        toggleNotes();
       } else if (e.key === 'o' || e.key === 'O') {
         toggleOverviewModal();
-      } else if (e.key === 'n' || e.key === 'N') {
-        toggleNotesModal();
       } else if (e.key === 'f' || e.key === 'F') {
         toggleFullscreen();
       }
     });
 
-    // Initialize slide deck on load
-    window.onload = () => {
-      showSlide(1);
-    };
+    // Initialize initial slide
+    updateSlide();
   </script>
 </body>
 </html>
