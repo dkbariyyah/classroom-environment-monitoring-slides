@@ -15,11 +15,11 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 // --- Network & Platform Credentials ---
-const char* ssid = "HONOR 400 Pro";
-const char* password = "kay123DKB";
+const char* ssid = "####"; //insert your wifi name 
+const char* password = "####"; //insert your wifi password
 
-const char* favoriot_api_key = "hzosIKrtL8wdd3wyFL1i1PRlr8dHmijq";
-const char* device_developer_id = "PPKIoT_1_device@dkbariyyah";
+const char* favoriot_api_key = "#######"; //find your api key
+const char* device_developer_id = "########";//insert your device developer id in favoriot
 
 // --- Favoriot MQTT Server Settings ---
 const char* mqtt_server = "mqtt.favoriot.com";
