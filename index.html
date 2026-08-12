@@ -105,7 +105,7 @@
         <i class="fa-solid fa-microchip"></i>
       </div>
       <div>
-        <h1 class="text-sm font-semibold text-slate-200 leading-tight">IoT Environmental & Air Quality Monitoring</h1>
+        <h1 class="text-sm font-semibold text-slate-200 leading-tight">Smart Class Environment Monitoring</h1>
         <p class="text-[11px] text-slate-400">ESP32 • MQ-2 • DHT11 • Favoriot MQTT • Telegram</p>
       </div>
     </div>
@@ -140,7 +140,7 @@
 
       <div class="space-y-4 max-w-4xl">
         <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-          Smart Environmental & Air Quality Monitoring System
+          Smart Class Environment Monitoring
         </h1>
         <p class="text-lg md:text-xl text-slate-300 font-light max-w-2xl mx-auto">
           Real-time IoT Microclimate Sensing, Gas Threshold Detection, Audiovisual Alerts, & Cloud Automation
@@ -159,9 +159,8 @@
       <!-- Presenter Info Card -->
       <div class="glass-card px-6 py-4 rounded-xl border border-slate-700/60 max-w-md w-full flex items-center justify-between text-left mt-6">
         <div>
-          <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Presenter / Author</p>
-          <p class="text-sm font-semibold text-slate-200">Engineering Mini-Project Team</p>
-          <p class="text-xs text-slate-400">Device ID: <span class="font-mono text-cyan-400">PPKIoT_1_device@dkbariyyah</span></p>
+          <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Presented by</p>
+          <p class="text-sm font-semibold text-slate-200">Team 1 PPK 10-14 August 2026</p>
         </div>
         <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold text-lg">
           <i class="fa-solid fa-graduation-cap text-cyan-400"></i>
@@ -177,7 +176,7 @@
         </div>
         <div>
           <h2 class="text-2xl font-bold text-slate-100">Project Objectives & Problem Statement</h2>
-          <p class="text-xs text-slate-400">Addressing indoor air quality monitoring challenges using scalable IoT architecture</p>
+          <p class="text-xs text-slate-400">Addressing classroom indoor air quality, health, and environmental safety in schools</p>
         </div>
       </div>
 
@@ -187,27 +186,27 @@
           <div>
             <div class="flex items-center space-x-3 mb-4">
               <div class="w-9 h-9 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center text-lg">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+                <i class="fa-solid fa-school-circle-exclamation"></i>
               </div>
-              <h3 class="text-lg font-semibold text-slate-200">The Problem</h3>
+              <h3 class="text-lg font-semibold text-slate-200">The Classroom Problem</h3>
             </div>
             <ul class="space-y-3 text-sm text-slate-300">
               <li class="flex items-start gap-2.5">
                 <i class="fa-solid fa-circle-xmark text-rose-400 text-xs mt-1"></i>
-                <span><strong>Silent Health Risks:</strong> Hazardous gas leakage (LPG, smoke, CO) often goes unnoticed indoors until critical thresholds are crossed.</span>
+                <span><strong>Poor Indoor Air & Stuffy Rooms:</strong> Enclosed classrooms often suffer from poor ventilation, haze, or smoke accumulation, causing student fatigue, drowsiness, and respiratory issues.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <i class="fa-solid fa-circle-xmark text-rose-400 text-xs mt-1"></i>
-                <span><strong>Lack of Remote Access:</strong> Traditional stand-alone alarms lack real-time cloud dashboard visibility and historical trends.</span>
+                <span><strong>Unmonitored Safety Hazards:</strong> Smoke, overheating electrical equipment, or gas leaks near science labs/canteens go undetected without automated warning systems.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <i class="fa-solid fa-circle-xmark text-rose-400 text-xs mt-1"></i>
-                <span><strong>No Remote Intervention:</strong> Standard alarm systems do not allow facility managers to remotely silence or test buzzers over Wi-Fi.</span>
+                <span><strong>Lack of Remote Central Alerting:</strong> Teachers and school staff lack real-time visibility to immediately instruct students to wear masks or improve ventilation.</span>
               </li>
             </ul>
           </div>
           <div class="mt-6 pt-3 border-t border-slate-800 text-xs text-rose-300/80 font-mono">
-            Requires automated threshold triggers + instant mobile notifications.
+            Requires automated classroom threshold triggers + instant student/teacher alerts.
           </div>
         </div>
 
@@ -223,20 +222,20 @@
             <ul class="space-y-3 text-sm text-slate-300">
               <li class="flex items-start gap-2.5">
                 <i class="fa-solid fa-circle-check text-emerald-400 text-xs mt-1"></i>
-                <span><strong>Real-Time Sensing:</strong> Continuously monitor temperature, humidity, and gas concentration with 15-second telemetry uploads.</span>
+                <span><strong>Classroom Microclimate Sensing:</strong> Continuously monitor classroom temperature, humidity, and smoke/gas levels with 15-second cloud uploads.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <i class="fa-solid fa-circle-check text-emerald-400 text-xs mt-1"></i>
-                <span><strong>Audiovisual Feedback:</strong> Implement local Red/Green status LEDs and an audible buzzer for immediate onsite warning.</span>
+                <span><strong>Student Visual & Audible Feedback:</strong> Display traffic light status LEDs (Green = Safe, Red = Wear Mask/Hazardous) and activate local buzzer alarms.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <i class="fa-solid fa-circle-check text-emerald-400 text-xs mt-1"></i>
-                <span><strong>Bidirectional Control:</strong> Utilize Favoriot MQTT RPC downlinks to control the local buzzer via a web dashboard switch.</span>
+                <span><strong>Teacher Remote Monitoring & RPC:</strong> Enable teachers to monitor air quality on Favoriot, override buzzers, and auto-send Telegram alerts (>200 AQI).</span>
               </li>
             </ul>
           </div>
           <div class="mt-6 pt-3 border-t border-slate-800 text-xs text-emerald-300/80 font-mono">
-            Automated Telegram Bot alerts trigger when AQI threshold > 200.
+            Automated Telegram Bot alerts warn teachers when AQI threshold > 200.
           </div>
         </div>
       </div>
@@ -249,68 +248,105 @@
           02
         </div>
         <div>
-          <h2 class="text-2xl font-bold text-slate-100">System Architecture & Data Flow</h2>
-          <p class="text-xs text-slate-400">End-to-end hardware-to-cloud telemetry and downlink control pipeline</p>
+          <h2 class="text-2xl font-bold text-slate-100">4 Layers IoT System Architecture</h2>
+          <p class="text-xs text-slate-400">Structured 4-layer framework: Sensing &rarr; Network &rarr; Data Processing &rarr; Application</p>
         </div>
       </div>
 
-      <!-- Architecture Diagram Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
-        
-        <!-- Step 1: Perception Layer -->
-        <div class="glass-card p-5 rounded-xl border border-slate-700/70 flex flex-col items-center text-center relative group">
-          <div class="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl mb-3">
-            <i class="fa-solid fa-wifi"></i>
-          </div>
-          <span class="text-[10px] font-mono text-amber-400 uppercase tracking-wider mb-1">Perception Layer</span>
-          <h3 class="text-sm font-bold text-slate-200 mb-2">Sensors & Actuators</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">MQ-2 Gas Sensor (GPIO 36)<br>DHT11 Sensor (GPIO 4)<br>Status LEDs & Buzzer</p>
+      <!-- 4 Layers Architecture Flow Stack -->
+      <div class="flex flex-col md:flex-row gap-4 items-stretch relative">
+        <!-- Upward Data Flow Indicator Bar -->
+        <div class="hidden md:flex flex-col items-center justify-between py-2 px-3 bg-slate-900/90 rounded-xl border border-slate-800 text-rose-400 shrink-0">
+          <i class="fa-solid fa-arrow-up text-lg animate-bounce"></i>
+          <span class="text-[10px] font-bold tracking-widest uppercase [writing-mode:vertical-lr] rotate-180 my-2 text-rose-400/90">Data Flow</span>
+          <div class="w-2 h-2 rounded-full bg-rose-500"></div>
         </div>
 
-        <!-- Step 2: Processing Layer -->
-        <div class="glass-card p-5 rounded-xl border border-slate-700/70 flex flex-col items-center text-center relative group">
-          <div class="w-12 h-12 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-3">
-            <i class="fa-solid fa-microchip"></i>
+        <!-- 4 Layer Cards Stacked (Top to Bottom: Application -> Data Processing -> Network -> Sensing) -->
+        <div class="flex-1 space-y-3">
+          
+          <!-- Layer 4: Application Layer -->
+          <div class="glass-card p-4 rounded-xl border-l-4 border-l-purple-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg font-bold shrink-0">
+                <i class="fa-solid fa-desktop"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Application Layer</span>
+                  <span class="text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded">Smart Applications &amp; Management</span>
+                </div>
+                <p class="text-xs font-semibold text-slate-200 mt-0.5">Smart Classroom Monitoring &amp; Telegram Bot Alerts</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 max-w-xs md:text-right">Favoriot Web Dashboard (Live Gauges, LED Status, Buzzer Control Switch) &amp; Automated Telegram Bot Notifications</p>
           </div>
-          <span class="text-[10px] font-mono text-cyan-400 uppercase tracking-wider mb-1">Processing Layer</span>
-          <h3 class="text-sm font-bold text-slate-200 mb-2">ESP32 MCU</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">Reads ADC1 signals, formats JSON payload, executes local threshold comparison (>200).</p>
-        </div>
 
-        <!-- Step 3: Transport & Cloud Layer -->
-        <div class="glass-card p-5 rounded-xl border border-slate-700/70 flex flex-col items-center text-center relative group">
-          <div class="w-12 h-12 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-3">
-            <i class="fa-solid fa-network-wired"></i>
+          <!-- Layer 3: Data Processing Layer -->
+          <div class="glass-card p-4 rounded-xl border-l-4 border-l-amber-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg font-bold shrink-0">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Data Processing Layer</span>
+                  <span class="text-[10px] bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded">Processing Unit / Decision Unit</span>
+                </div>
+                <p class="text-xs font-semibold text-slate-200 mt-0.5">Favoriot Cloud IoT Platform</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 max-w-xs md:text-right">Data stream processing, historical storage, analytics middleware &amp; automated Rules Engine (<code class="text-amber-300">air_quality &gt; 200</code> trigger)</p>
           </div>
-          <span class="text-[10px] font-mono text-purple-400 uppercase tracking-wider mb-1">Transport Layer</span>
-          <h3 class="text-sm font-bold text-slate-200 mb-2">Favoriot MQTT Broker</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">Publishes telemetry to <code>v2/streams</code><br>Listens for RPC downlinks on <code>v2/rpc</code></p>
-        </div>
 
-        <!-- Step 4: Application Layer -->
-        <div class="glass-card p-5 rounded-xl border border-slate-700/70 flex flex-col items-center text-center relative group">
-          <div class="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl mb-3">
-            <i class="fa-solid fa-desktop"></i>
+          <!-- Layer 2: Network Layer -->
+          <div class="glass-card p-4 rounded-xl border-l-4 border-l-cyan-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-lg font-bold shrink-0">
+                <i class="fa-solid fa-network-wired"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">Network Layer</span>
+                  <span class="text-[10px] bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded">Internet / Network Gateway</span>
+                </div>
+                <p class="text-xs font-semibold text-slate-200 mt-0.5">Wi-Fi Gateway &amp; Favoriot MQTT Broker</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 max-w-xs md:text-right">Wi-Fi transmission, MQTT telemetry publishing (<code class="text-cyan-300">v2/streams</code>) &amp; RPC downlink control (<code class="text-cyan-300">v2/rpc</code>)</p>
           </div>
-          <span class="text-[10px] font-mono text-blue-400 uppercase tracking-wider mb-1">Application Layer</span>
-          <h3 class="text-sm font-bold text-slate-200 mb-2">Dashboard & Telegram</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">Live Gauges, Control Switch for Buzzer, and Automated Telegram Bot Notifications.</p>
-        </div>
 
+          <!-- Layer 1: Sensing Layer -->
+          <div class="glass-card p-4 rounded-xl border-l-4 border-l-emerald-500 border-slate-700/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg font-bold shrink-0">
+                <i class="fa-solid fa-microchip"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Sensing Layer</span>
+                  <span class="text-[10px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded">Physical Object / Data Gathering</span>
+                </div>
+                <p class="text-xs font-semibold text-slate-200 mt-0.5">ESP32 Microcontroller, Sensors &amp; Physical Actuators</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 max-w-xs md:text-right">MQ-2 Gas Sensor (GPIO 36), DHT11 Temp/Hum (GPIO 4), Red/Green Traffic LEDs (GPIO 26/27) &amp; Buzzer (GPIO 25)</p>
+          </div>
+
+        </div>
       </div>
 
-      <!-- Feature Highlight Banner -->
-      <div class="glass-card p-4 rounded-xl border border-cyan-500/30 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center space-x-3">
-          <i class="fa-solid fa-arrows-rotate text-cyan-400 text-lg animate-spin" style="animation-duration: 8s;"></i>
-          <div>
-            <p class="text-xs font-semibold text-slate-200">Bidirectional Data Transmission</p>
-            <p class="text-[11px] text-slate-400">Uplink (Sensor Telemetry) + Downlink (Dashboard Switch RPC Command)</p>
-          </div>
-        </div>
+      <!-- Footer Architecture Alignment Badge -->
+      <div class="glass-card p-3 rounded-xl border border-cyan-500/30 flex items-center justify-between text-xs">
         <div class="flex items-center gap-2">
-          <span class="px-2.5 py-1 rounded bg-slate-800 text-[11px] font-mono text-emerald-400 border border-slate-700">Pub: &lt;API_KEY&gt;/v2/streams</span>
-          <span class="px-2.5 py-1 rounded bg-slate-800 text-[11px] font-mono text-cyan-400 border border-slate-700">Sub: &lt;API_KEY&gt;/v2/rpc</span>
+          <i class="fa-solid fa-layer-group text-cyan-400"></i>
+          <span class="text-slate-300 font-semibold">4 Layers IoT Architecture Alignment</span>
+        </div>
+        <div class="flex items-center gap-2 font-mono text-[11px]">
+          <span class="text-emerald-400">Sensing Layer</span> &rarr;
+          <span class="text-cyan-400">Network Layer</span> &rarr;
+          <span class="text-amber-400">Data Processing Layer</span> &rarr;
+          <span class="text-purple-400">Application Layer</span>
         </div>
       </div>
     </div>
@@ -729,8 +765,8 @@ client.publish(pub_topic.c_str(), jsonPayload.c_str());</code></pre>
 
     const speakerNotes = {
       1: "Good day, everyone. Welcome to our presentation on the Smart Environmental and Air Quality Monitoring System using ESP32, MQ-2, DHT11, and Favoriot MQTT platform.",
-      2: "Here we outline our primary objectives: eliminating hidden indoor gas risks and providing bidirectional cloud control to silences/test alarms over Wi-Fi.",
-      3: "Our system architecture spans four main layers: Perception (Sensors), Processing (ESP32), Transport (Favoriot MQTT Broker), and Application (Dashboard & Telegram).",
+      2: "Here we outline our primary objectives: addressing poor classroom ventilation, haze, and smoke risks in schools, while giving teachers real-time dashboard visibility and instant Telegram alerts to protect student health.",
+      3: "Our system strictly adheres to the standard 4-Layer IoT Architecture: Sensing Layer (ESP32 & Sensors), Network Layer (Wi-Fi & Favoriot MQTT Broker), Data Processing Layer (Favoriot Cloud Platform & Rules Engine), and Application Layer (Smart Classroom Dashboard & Telegram Alerts).",
       4: "Notice the hardware pin mapping. Crucially, the MQ-2 sensor connects to GPIO 36, an ADC1 pin on the ESP32 that remains functional while Wi-Fi is active.",
       5: "Instead of HTTP polling, we use MQTT for sub-second communication. Sensor data publishes to v2/streams, while switch commands arrive on v2/rpc.",
       6: "On Favoriot, we configured a Gauge widget for Air Quality, a Status card for Red/Green LED state, and a Control Switch bound to key BUZZ.",
