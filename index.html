@@ -234,7 +234,7 @@
             </li>
             <li class="flex items-start space-x-2">
               <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
-              <span><b>Visual Student Safety Guidance:</b> Green LED indicates safe air. Red LED alerts students to put on protective masks or evacuate when gas exceeds 200 ADC.</span>
+              <span><b>Visual Student Safety Guidance:</b> Green LED indicates safe air. Red LED alerts students to put on protective masks or evacuate when gas exceeds 200 ppm.</span>
             </li>
             <li class="flex items-start space-x-2">
               <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
@@ -381,19 +381,19 @@
                 </tr>
                 <tr>
                   <td class="p-2.5 font-semibold text-rose-400">Red LED</td>
-                  <td class="p-2.5">Anode ($+$)</td>
+                  <td class="p-2.5">Anode (+)</td>
                   <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 26</td>
                   <td class="p-2.5">Alert State (`air_quality > 200`)</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-semibold text-emerald-400">Green LED</td>
-                  <td class="p-2.5">Anode ($+$)</td>
+                  <td class="p-2.5">Anode (+)</td>
                   <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 27</td>
                   <td class="p-2.5">Safe State (`air_quality <= 200`)</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-semibold text-indigo-400">Buzzer Module</td>
-                  <td class="p-2.5">Positive ($+$)</td>
+                  <td class="p-2.5">Positive (+)</td>
                   <td class="p-2.5 font-mono text-blue-400 font-bold">GPIO 25</td>
                   <td class="p-2.5">1 kHz Alarm Tone / Switch Override</td>
                 </tr>
@@ -631,7 +631,7 @@ digitalWrite(BUZZER_PIN, HIGH);</code></pre>
             <p class="text-xs text-slate-200">
               🚨 <b>[CLASSROOM AIR ALERT]</b> <br>
               Air Quality index exceeded safety threshold! <br>
-              Current Reading: <b>245 ADC</b>. Please instruct students to put on protective masks.
+              Current Reading: <b>245 ppm</b>. Please instruct students to put on protective masks.
             </p>
           </div>
         </div>
@@ -655,7 +655,7 @@ digitalWrite(BUZZER_PIN, HIGH);</code></pre>
             <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">PASSED</span>
           </div>
           <ul class="text-xs text-slate-300 space-y-2">
-            <li><b>Sensor Reading:</b> MQ-2 outputs baseline values between <b>50 – 180 ADC</b> in normal room air.</li>
+            <li><b>Sensor Reading:</b> MQ-2 outputs baseline values between <b>50 – 180 PPM</b> in normal room air.</li>
             <li><b>Hardware State:</b> Green LED turns ON; Red LED remains OFF; Buzzer remains silent.</li>
             <li><b>Cloud State:</b> Favoriot telemetry stream updates every 15s showing safe values; no Telegram alerts fired.</li>
           </ul>
@@ -670,7 +670,7 @@ digitalWrite(BUZZER_PIN, HIGH);</code></pre>
             <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold">PASSED</span>
           </div>
           <ul class="text-xs text-slate-300 space-y-2">
-            <li><b>Sensor Reading:</b> MQ-2 reading spikes rapidly past <b>200 ADC</b> upon smoke detection.</li>
+            <li><b>Sensor Reading:</b> MQ-2 reading spikes rapidly past <b>200 PPM</b> upon smoke detection.</li>
             <li><b>Hardware State:</b> Local Green LED shuts OFF and Red LED activates instantly.</li>
             <li><b>Cloud State:</b> Favoriot Rules engine detects breach; sends instant Telegram alert notification within seconds.</li>
           </ul>
